@@ -4,6 +4,7 @@ import { faker } from "@faker-js/faker";
 import { IBot } from "./IBot.interface";
 import dotenv from "dotenv";
 import vault from "node-vault";
+import * as process from "process";
 
 dotenv.config();
 
@@ -11,6 +12,8 @@ class BotSeeder {
   private readonly vaultOpts: vault.VaultOptions = {
     token: process.env.VAULT_TOKEN,
   };
+
+  private readonly botsQty = Number.parseInt(process.env.BOTS_QTY ?? "10_000");
 
   private readonly vault = vault(this.vaultOpts);
 
@@ -64,7 +67,7 @@ class BotSeeder {
 
   private generateBots = () => {
     console.log("[bot-seeder]: generating bots...");
-    for (let i = 0; i < 10_000; i++) {
+    for (let i = 0; i < this.botsQty; i++) {
       const bot = new this.BotModel({
         login: faker.internet.userName(),
       });
@@ -79,7 +82,7 @@ class BotSeeder {
             .save()
             .then((bot) => {
               console.log(`[bot-seeder]: generated bot with id: ${bot._id}`);
-              if (i === 9_999) {
+              if (i === this.botsQty - 1) {
                 console.log(
                   "[bot-seeder]: bots successfully generated! Ending the work...",
                 );
