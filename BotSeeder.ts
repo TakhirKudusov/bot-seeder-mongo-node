@@ -25,7 +25,7 @@ class BotSeeder {
         type: String,
         default: "",
       },
-      created_at: {
+      createdAt: {
         type: Date,
         default: Date.now,
       },
